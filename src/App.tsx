@@ -43,7 +43,7 @@ const UnityContainer = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 80vh; /* Adjust this value as needed */
+   /* Adjust this value as needed */
   margin-top: 20px;
 `;
 
@@ -104,14 +104,12 @@ function App() {
     <Router>
       <StyledApp>
         <AppContainer>
-          <FlexBoxCol>
             <TonConnectButton />
-          </FlexBoxCol>
-        </AppContainer>
         <UnityContainer>
           <Loading />
-          <Unity unityProvider={unityProvider} style={{ width: '326px', height: '595px' }} />
+          <Unity unityProvider={unityProvider} style={{ width: '100%', height: '565px' }} />
         </UnityContainer>
+        </AppContainer>
       </StyledApp>
     </Router>
   );
