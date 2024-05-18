@@ -2,16 +2,9 @@ import "./App.css";
 import React from "react";
 import { TonConnectButton } from "@tonconnect/ui-react";
 
-import { Counter } from "./components/Counter";
-import { Jetton } from "./components/Jetton";
-import { TransferTon } from "./components/TransferTon";
 import styled from "styled-components";
-import { Button, FlexBoxCol, FlexBoxRow } from "./components/styled/styled";
 import { useTonConnect } from "./hooks/useTonConnect";
-import { CHAIN } from "@tonconnect/protocol";
 import "@twa-dev/sdk";
-import Game from "./game/home";
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Unity, useUnityContext } from "react-unity-webgl";
 
 import Loading from "./game/loding";
@@ -38,62 +31,25 @@ const AppContainer = styled.div`
   margin: 0 auto;
 `;
 
-const UnityContainer = styled.div`  
+const UnityContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-   /* Adjust this value as needed */
   margin-top: 20px;
+  width: 100%;
+  height: calc(100vh - 40px); /* Adjust this value as needed */
 `;
 
-function Exchange() {
-  return <Game />;
-}
-
-function Mine() {
-  return <h2>Mine Page</h2>;
-}
-
-function Friends() {
-  return <h2>Friends Page</h2>;
-}
-
-function Earn() {
-  return <h2>Earn Page</h2>;
-}
-
-function Airdrop() {
-  return <h2>Airdrop Page</h2>;
-}
-
-function ButtonNav() {
-  return (
-    <div style={{ position: 'fixed', bottom: 0, width: '100%', background: '#fff', padding: '10px', borderTop: '1px solid #ccc' }}>
-      <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
-        <a href="/">
-          <button>Exchange</button>
-        </a>
-        <a href="/pages/Mine">
-          <button>Mine</button>
-        </a>
-        <a href="/pages/Friends">
-          <button>Friends</button>
-        </a>
-        <a href="/pages/Earn">
-          <button>Earn</button>
-        </a>
-        <a href="/pages/ads">
-          <button>Airdrop</button>
-        </a>
-      </div>
-    </div>
-  );
-}
+const UnityStyled = styled(Unity)`
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+`;
 
 function App() {
   const { network } = useTonConnect();
-  const { unityProvider } = useUnityContext({
+  const { unityProvider, isLoaded, loadingProgression } = useUnityContext({
     loaderUrl: "buildUnity/WebGl.loader.js",
     dataUrl: "buildUnity/webgl.data",
     frameworkUrl: "buildUnity/build.framework.js",
@@ -101,17 +57,15 @@ function App() {
   });
 
   return (
-    <Router>
-      <StyledApp>
-        <AppContainer>
-            <TonConnectButton />
+    <StyledApp>
+      <AppContainer>
+        <TonConnectButton />
         <UnityContainer>
-          <Loading />
-          <Unity unityProvider={unityProvider} style={{ width: '100%', height: '565px' }} />
+          {!isLoaded && <Loading />}
+          <UnityStyled unityProvider={unityProvider} />
         </UnityContainer>
-        </AppContainer>
-      </StyledApp>
-    </Router>
+      </AppContainer>
+    </StyledApp>
   );
 }
 

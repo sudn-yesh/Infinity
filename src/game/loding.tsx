@@ -6,7 +6,7 @@ const Loading: React.FC = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 5000); // 5 seconds
+    }, 10000); // 5 seconds
 
     // Cleanup timer on component unmount
     return () => clearTimeout(timer);
