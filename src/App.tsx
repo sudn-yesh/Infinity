@@ -14,7 +14,7 @@ import Game from "./game/home";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Unity, useUnityContext } from "react-unity-webgl";
 
-
+import Loading from "./game/loding";
 import Page1 from './pages/Mine';
 import Page2 from './pages/Friends';
 import Page3 from './pages/Earn';
@@ -90,7 +90,6 @@ function ButtonNav() {
     </div>
   );
 }
-import Loading from "./game/loding";
 
 function App() {
   const { network } = useTonConnect();
@@ -111,7 +110,7 @@ function App() {
         </AppContainer>
         <UnityContainer>
           <Loading />
-          <Unity unityProvider={unityProvider} style={{ width: '100%', height: '100%' }} />
+          <Unity unityProvider={unityProvider} style={{ width: '326px', height: '595px' }} />
         </UnityContainer>
       </StyledApp>
     </Router>
