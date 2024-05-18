@@ -1,6 +1,4 @@
-// src/components/Loading.tsx
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, CSSProperties } from 'react';
 
 const Loading: React.FC = () => {
   const [loading, setLoading] = useState(true);
@@ -28,7 +26,7 @@ const Loading: React.FC = () => {
   );
 };
 
-const styles = {
+const styles: { [key: string]: CSSProperties } = {
   container: {
     display: 'flex',
     flexDirection: 'column',
