@@ -1,18 +1,9 @@
-import "./App.css";
-import React from "react";
-import { TonConnectButton } from "@tonconnect/ui-react";
-
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
+import { TonConnectButton } from "@tonconnect/ui-react";
 import { useTonConnect } from "./hooks/useTonConnect";
-import "@twa-dev/sdk";
 import { Unity, useUnityContext } from "react-unity-webgl";
-
 import Loading from "./game/loding";
-import Page1 from './pages/Mine';
-import Page2 from './pages/Friends';
-import Page3 from './pages/Earn';
-import Page4 from './pages/Airdrop';
-import Page5 from './pages/Mine';
 
 const StyledApp = styled.div`
   background-color: #e8e8e8;
@@ -37,7 +28,7 @@ const UnityContainer = styled.div`
   align-items: center;
   margin-top: 20px;
   width: 100%;
-  height: calc(100vh - 40px); /* Adjust this value as needed */
+  height: calc(100vh - 40px);
 `;
 
 const UnityStyled = styled(Unity)`
@@ -50,19 +41,56 @@ const UnityStyled = styled(Unity)`
 function App() {
   const { network } = useTonConnect();
   const { unityProvider, isLoaded, loadingProgression } = useUnityContext({
-    loaderUrl: "buildUnity/WebGl.loader.js",
+    loaderUrl: "buildUnity/WebGL.loader.js",
     dataUrl: "buildUnity/webgl.data",
     frameworkUrl: "buildUnity/build.framework.js",
     codeUrl: "buildUnity/build.wasm",
+    webglContextAttributes: {
+      preserveDrawingBuffer: true,
+      antialias: true,
+    },
   });
+
+  const unityContainerRef = useRef<HTMLDivElement | null>(null);
+  const [devicePixelRatio, setDevicePixelRatio] = useState(window.devicePixelRatio);
+
+  useEffect(() => {
+    const updateDevicePixelRatio = () => {
+      setDevicePixelRatio(window.devicePixelRatio);
+    };
+
+    const mediaMatcher = window.matchMedia(`screen and (resolution: ${devicePixelRatio}dppx)`);
+    mediaMatcher.addEventListener("change", updateDevicePixelRatio);
+
+    return () => {
+      mediaMatcher.removeEventListener("change", updateDevicePixelRatio);
+    };
+  }, [devicePixelRatio]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (unityContainerRef.current) {
+        const canvas = unityContainerRef.current.querySelector("canvas");
+        if (canvas) {
+        }
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <StyledApp>
       <AppContainer>
         <TonConnectButton />
-        <UnityContainer>
-          {!isLoaded && <Loading />}
-          <UnityStyled unityProvider={unityProvider} />
+        <UnityContainer ref={unityContainerRef}>
+           <Loading />
+          <UnityStyled unityProvider={unityProvider} devicePixelRatio={devicePixelRatio} />
         </UnityContainer>
       </AppContainer>
     </StyledApp>
