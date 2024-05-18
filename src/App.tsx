@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import styled from "styled-components";
 import { TonConnectButton } from "@tonconnect/ui-react";
 import { useTonConnect } from "./hooks/useTonConnect";
@@ -28,7 +28,7 @@ const UnityContainer = styled.div`
   align-items: center;
   margin-top: 20px;
   width: 100%;
-  height: calc(100vh - 40px);
+  height: 100%;
 `;
 
 const UnityStyled = styled(Unity)`
@@ -40,7 +40,7 @@ const UnityStyled = styled(Unity)`
 
 function App() {
   const { network } = useTonConnect();
-  const { unityProvider, isLoaded, loadingProgression } = useUnityContext({
+  const { unityProvider, isLoaded } = useUnityContext({
     loaderUrl: "buildUnity/WebGL.loader.js",
     dataUrl: "buildUnity/webgl.data",
     frameworkUrl: "buildUnity/build.framework.js",
@@ -53,44 +53,59 @@ function App() {
 
   const unityContainerRef = useRef<HTMLDivElement | null>(null);
   const [devicePixelRatio, setDevicePixelRatio] = useState(window.devicePixelRatio);
+  const [showLoader, setShowLoader] = useState(true);
+
+  const updateDevicePixelRatio = useCallback(() => {
+    setDevicePixelRatio(window.devicePixelRatio);
+  }, []);
 
   useEffect(() => {
-    const updateDevicePixelRatio = () => {
-      setDevicePixelRatio(window.devicePixelRatio);
-    };
-
     const mediaMatcher = window.matchMedia(`screen and (resolution: ${devicePixelRatio}dppx)`);
     mediaMatcher.addEventListener("change", updateDevicePixelRatio);
 
     return () => {
       mediaMatcher.removeEventListener("change", updateDevicePixelRatio);
     };
+  }, [devicePixelRatio, updateDevicePixelRatio]);
+
+  const resizeCanvas = useCallback(() => {
+    const canvas = document.querySelector("#unity-canvas") as HTMLCanvasElement;
+    if (canvas) {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      canvas.width = width * devicePixelRatio;
+      canvas.height = height * devicePixelRatio;
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+    }
   }, [devicePixelRatio]);
 
   useEffect(() => {
-    const handleResize = () => {
-      if (unityContainerRef.current) {
-        const canvas = unityContainerRef.current.querySelector("canvas");
-        if (canvas) {
-        }
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-    handleResize();
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
 
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("resize", resizeCanvas);
     };
-  }, []);
+  }, [resizeCanvas]);
+
+  useEffect(() => {
+    if (isLoaded) {
+      const timer = setTimeout(() => {
+        setShowLoader(false);
+      }, 2000); // Adjust delay time as needed (2 seconds here)
+
+      return () => clearTimeout(timer);
+    }
+  }, [isLoaded]);
 
   return (
     <StyledApp>
       <AppContainer>
         <TonConnectButton />
         <UnityContainer ref={unityContainerRef}>
-           <Loading />
-          <UnityStyled unityProvider={unityProvider} devicePixelRatio={devicePixelRatio} />
+          {showLoader && <Loading />}
+          <UnityStyled unityProvider={unityProvider} devicePixelRatio={devicePixelRatio} id="unity-canvas" />
         </UnityContainer>
       </AppContainer>
     </StyledApp>
