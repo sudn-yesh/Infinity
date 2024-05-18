@@ -38,7 +38,7 @@ const AppContainer = styled.div`
   margin: 0 auto;
 `;
 
-const UnityContainer = styled.div`
+const UnityContainer = styled.div`  
   display: flex;
   justify-content: center;
   align-items: center;
@@ -90,6 +90,7 @@ function ButtonNav() {
     </div>
   );
 }
+import Loading from "./game/loding";
 
 function App() {
   const { network } = useTonConnect();
@@ -109,6 +110,7 @@ function App() {
           </FlexBoxCol>
         </AppContainer>
         <UnityContainer>
+          <Loading />
           <Unity unityProvider={unityProvider} style={{ width: '100%', height: '100%' }} />
         </UnityContainer>
       </StyledApp>
