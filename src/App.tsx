@@ -34,7 +34,7 @@ const UnityStyled = styled(Unity)`
 function App() {
   const { network } = useTonConnect();
   const { unityProvider, isLoaded } = useUnityContext({
-    loaderUrl: "buildUnity/WebGL.loader.js",
+    loaderUrl: "buildUnity/WebGl.loader.js",
     dataUrl: "buildUnity/webgl.data",
     frameworkUrl: "buildUnity/build.framework.js",
     codeUrl: "buildUnity/build.wasm",
