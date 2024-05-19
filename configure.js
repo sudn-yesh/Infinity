@@ -39,7 +39,7 @@ let githubUsername, githubRepo, botUsername;
     githubRepo = params[2];
   } catch (e) {}
 
-  const accessToken = await question("Enter your bot access token: ");
+  const accessToken = '6379675232:AAG1pQy3zaCPGgnG6GSg3YtgEnfx6ITk_no';
   if (!accessToken?.length > 0) exitError("Token is required");
 
   const githubUsernameQ = await question(
@@ -48,7 +48,7 @@ let githubUsername, githubRepo, botUsername;
     }: `
   );
   githubUsername = githubUsernameQ || githubUsername;
-  if (!githubUsername?.length > 0) exitError("Github username is required");
+  if (!githubUsername?.length > 0) exitError("Github username is required"); 
 
   const githubRepoQ = await question(
     `Enter your forked repo name${githubRepo ? ` (${githubRepo})` : ``}: `
@@ -68,7 +68,7 @@ let githubUsername, githubRepo, botUsername;
   const resp = await axios.post(
     `https://api.telegram.org/bot${accessToken}/setChatMenuButton`,
     {
-      menu_button: {
+      menu_button: {  
         type: "web_app",
         text: "Launch Webapp",
         web_app: {

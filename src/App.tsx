@@ -6,19 +6,13 @@ import { Unity, useUnityContext } from "react-unity-webgl";
 import Loading from "./game/loding";
 
 const StyledApp = styled.div`
-  background-color: #e8e8e8;
+  background-color: black;
   color: black;
 
-  @media (prefers-color-scheme: dark) {
-    background-color: #222;
-    color: white;
-  }
-  min-height: 100vh;
-  padding: 20px 20px;
 `;
 
 const AppContainer = styled.div`
-  max-width: 900px;
+  max-width: 100%;
   margin: 0 auto;
 `;
 
@@ -26,7 +20,6 @@ const UnityContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
   width: 100%;
   height: 100%;
 `;
@@ -34,14 +27,14 @@ const UnityContainer = styled.div`
 const UnityStyled = styled(Unity)`
   width: 100%;
   height: 100%;
-  max-width: 100%;
-  max-height: 100%;
+  max-width: 112%;
+  max-height: 112%;
 `;
 
 function App() {
   const { network } = useTonConnect();
   const { unityProvider, isLoaded } = useUnityContext({
-    loaderUrl: "buildUnity/WebGl.loader.js",
+    loaderUrl: "buildUnity/WebGL.loader.js",
     dataUrl: "buildUnity/webgl.data",
     frameworkUrl: "buildUnity/build.framework.js",
     codeUrl: "buildUnity/build.wasm",
@@ -100,15 +93,12 @@ function App() {
   }, [isLoaded]);
 
   return (
-    <StyledApp>
-      <AppContainer>
-        <TonConnectButton />
-        <UnityContainer ref={unityContainerRef}>
-          {showLoader && <Loading />}
-          <UnityStyled unityProvider={unityProvider} devicePixelRatio={devicePixelRatio} id="unity-canvas" />
-        </UnityContainer>
-      </AppContainer>
-    </StyledApp>
+    <div >
+      <UnityContainer ref={unityContainerRef}>
+        <UnityStyled unityProvider={unityProvider} devicePixelRatio={devicePixelRatio} id="unity-canvas" />
+        {showLoader && <Loading />}
+      </UnityContainer>
+    </div>
   );
 }
 
