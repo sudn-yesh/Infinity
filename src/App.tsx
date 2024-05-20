@@ -86,7 +86,7 @@ function App() {
     if (isLoaded) {
       const timer = setTimeout(() => {
         setShowLoader(false);
-      }, 2000); // Adjust delay time as needed (2 seconds here)
+      }, 4000); // Adjust delay time as needed (2 seconds here)
 
       return () => clearTimeout(timer);
     }
@@ -95,8 +95,8 @@ function App() {
   return (
     <div >
       <UnityContainer ref={unityContainerRef}>
-        <UnityStyled unityProvider={unityProvider} devicePixelRatio={devicePixelRatio} id="unity-canvas" />
         {showLoader && <Loading />}
+        <UnityStyled unityProvider={unityProvider} devicePixelRatio={devicePixelRatio} id="unity-canvas" />
       </UnityContainer>
     </div>
   );
