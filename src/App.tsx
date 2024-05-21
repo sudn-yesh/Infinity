@@ -95,8 +95,8 @@ function App() {
   return (
     <div >
       <UnityContainer ref={unityContainerRef}>
-        {showLoader && <Loading />}
         <UnityStyled unityProvider={unityProvider} devicePixelRatio={devicePixelRatio} id="unity-canvas" />
+        {showLoader && <Loading />}
       </UnityContainer>
     </div>
   );
