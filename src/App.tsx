@@ -98,6 +98,7 @@ function App() {
         <UnityStyled unityProvider={unityProvider} devicePixelRatio={devicePixelRatio} id="unity-canvas" />
         {showLoader && <Loading />}
       </UnityContainer>
+      
     </div>
   );
 }
